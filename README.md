@@ -1,2 +1,3 @@
-# choosist-api
-A Nest Js API for choosing laptop
+# Choosist-API
+An CRUD API for Laptop and Searching Laptop using parameters.
+Build using Nest Js
