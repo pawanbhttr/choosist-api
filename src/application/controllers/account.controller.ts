@@ -21,6 +21,8 @@ export class AccountController {
     }
 
     @Post("signup")
+    @UseGuards(AuthGuard('local'))
+    @HttpCode(200)
     async create(@Body() model: UserDto) : Promise<string> {
         return await this.userService.create(model)
     }
