@@ -14,14 +14,12 @@ export class AccountController {
         private readonly userService: UserService) { }
 
     @Post("signin")
-    @UseGuards(AuthGuard('local'))
     @HttpCode(200)
     async login(@Body() model: LoginDto): Promise<any> {
         return await this.accountService.login(model);
     }
 
     @Post("signup")
-    @UseGuards(AuthGuard('local'))
     @HttpCode(200)
     async create(@Body() model: UserDto) : Promise<string> {
         return await this.userService.create(model)
