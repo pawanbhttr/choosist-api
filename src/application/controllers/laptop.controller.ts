@@ -13,14 +13,14 @@ export class LaptopController {
     constructor(private laptopService: LaptopService) { }
 
     @Get()
-    @UseGuards(JwtAuthGuard)
+    // @UseGuards(JwtAuthGuard)
     @HttpCode(200)
     async findAll(): Promise<Laptop[]> {
         return await this.laptopService.findAll();
     }
 
     @Get(":id")
-    @UseGuards(JwtAuthGuard)
+    // @UseGuards(JwtAuthGuard)
     @HttpCode(200)
     async find(@Param('id') id: string): Promise<Laptop> {
         return await this.laptopService.findById(id);
@@ -48,7 +48,7 @@ export class LaptopController {
     }
 
     @Post("search")
-    @UseGuards(JwtAuthGuard)
+    // @UseGuards(JwtAuthGuard)
     @ApiResponse({ type: [Laptop], isArray: true, status: 200 })
     async search(@Body() model: SearchLaptopDto): Promise<Laptop[]> {
         return await this.laptopService.search(model);
