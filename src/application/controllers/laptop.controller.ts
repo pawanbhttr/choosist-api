@@ -53,4 +53,11 @@ export class LaptopController {
     async search(@Body() model: SearchLaptopDto): Promise<Laptop[]> {
         return await this.laptopService.search(model);
     }
+
+    @Get("brand/:brand")
+    // @UseGuards(JwtAuthGuard)
+    @HttpCode(200)
+    async searchByBrand(@Param('brand') brand: string): Promise<Laptop[]> {
+        return await this.laptopService.searchByBrand(brand);
+    }
 }

@@ -9,7 +9,7 @@ import { Laptop } from "../entities/laptop.entity";
 @Injectable()
 export class LaptopService {
     constructor(
-        @InjectRepository(Laptop) 
+        @InjectRepository(Laptop)
         private laptopRepository: Repository<Laptop>,
         private dataSource: DataSource
     ) { }
@@ -66,21 +66,30 @@ export class LaptopService {
 
     async search(model: SearchLaptopDto): Promise<Laptop[]> {
         const laptops = await this.dataSource.manager
-                        .createQueryBuilder(Laptop, "laptop")
-                        .where("laptop.brand like :brand OR laptop.os like :os OR laptop.processor = :processor OR laptop.ram = :ram OR laptop.graphics = :graphics OR ((:isSSD = true AND laptop.ssd > 0) OR (:isSSD = false AND laptop.hdd > 0)) OR laptop.ssd >= :ssd OR laptop.hdd >= :hdd OR laptop.screen >= :screen OR (laptop.price >= :greater_price AND :greater_price != 0) OR (laptop.price <= :less_price AND :less_price != 0) OR (:greater_price != 0 AND :less_price != 0 AND laptop.price >= :greater_price AND laptop.price <= :less_price)", {
-                            brand: '%'+model.brand+'%',
-                            os: '%'+model.os+'%',
-                            processor: model.processor,
-                            ram: model.ram,
-                            screen: model.screen,
-                            graphics: model.graphics,
-                            isSSD: model.isSSD,
-                            ssd: model.ssd,
-                            hdd: model.hdd,
-                            greater_price: model.price_greaterthan,
-                            less_price: model.price_lessthan
-                        })
-                        .getMany();
+            .createQueryBuilder(Laptop, "laptop")
+            .where("laptop.brand like :brand OR laptop.os like :os OR laptop.processor = :processor OR laptop.ram = :ram OR laptop.graphics = :graphics OR ((:isSSD = true AND laptop.ssd > 0) OR (:isSSD = false AND laptop.hdd > 0)) OR laptop.ssd >= :ssd OR laptop.hdd >= :hdd OR laptop.screen >= :screen OR (laptop.price >= :greater_price AND :greater_price != 0) OR (laptop.price <= :less_price AND :less_price != 0) OR (:greater_price != 0 AND :less_price != 0 AND laptop.price >= :greater_price AND laptop.price <= :less_price)", {
+                brand: '%' + model.brand + '%',
+                os: '%' + model.os + '%',
+                processor: model.processor,
+                ram: model.ram,
+                screen: model.screen,
+                graphics: model.graphics,
+                isSSD: model.isSSD,
+                ssd: model.ssd,
+                hdd: model.hdd,
+                greater_price: model.price_greaterthan,
+                less_price: model.price_lessthan
+            })
+            .getMany();
+
+        return laptops;
+    }
+
+    async searchByBrand(brandName: string): Promise<Laptop[]> {
+        const laptops = await this.dataSource.manager
+            .createQueryBuilder(Laptop, "laptop")
+            .where("laptop.brand LIKE :brand", { brand: '%' + brandName + '%' })
+            .getMany();
 
         return laptops;
     }
