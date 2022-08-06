@@ -1,10 +1,18 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { LaptopUsage } from "../enums/laptop-usage.enum";
+import { ApiAcceptedResponse, ApiProperty } from "@nestjs/swagger";
 
 export class SearchLaptopDto {
-    @ApiProperty({ default: LaptopUsage.Personal })
-    usage: LaptopUsage;
+    @ApiProperty({ default: true })
+    isPersonalUse: boolean;
 
     @ApiProperty()
     price_upto: number;
+
+    @ApiProperty()
+    screen_greaterthan: number;
+
+    @ApiProperty()
+    screen_lessthan: number;
+
+    @ApiProperty()
+    os: string;
 }

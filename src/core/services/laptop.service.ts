@@ -4,7 +4,6 @@ import { merge } from "lodash";
 import { DataSource, Repository } from "typeorm";
 import { LaptopDto } from "../common/dtos/laptop.dto";
 import { SearchLaptopDto } from "../common/dtos/search-laptop.dto";
-import { LaptopUsage } from "../common/enums/laptop-usage.enum";
 import { Laptop } from "../entities/laptop.entity";
 
 @Injectable()
@@ -67,16 +66,19 @@ export class LaptopService {
 
     async search(model: SearchLaptopDto): Promise<Laptop[]> {
         let whereClause = "";
-        if(LaptopUsage.Personal == model.usage){
-            whereClause = " AND laptop.graphics >= 4 AND laptop.processor in ('i3','i5','i7') AND laptop.ram >= 4"
+        if (model.isPersonalUse) {
+            whereClause = " AND laptop.graphics >= 4 AND UPPER(laptop.processor) in ('I3','I5','I7') AND laptop.ram >= 4"
         } else {
-            whereClause = " AND laptop.processor in ('i5','i7','i9') AND laptop.ram >= 8"
+            whereClause = " AND UPPER(laptop.processor) in ('I5','I7','I9') AND laptop.ram >= 8"
         }
-        
+
         const laptops = await this.dataSource.manager
             .createQueryBuilder(Laptop, "laptop")
-            .where("laptop.price <= :price_upto" + whereClause, {
-                price_upto: model.price_upto
+            .where("(laptop.price <= :price_upto OR :price_upto = 0) AND ((laptop.screen BETWEEN :screen_greaterthan AND :screen_lessthan) OR (:screen_greaterthan = 0 AND :screen_lessthan = 0)) AND UPPER(os) = UPPER(:os)" + whereClause, {
+                price_upto: model.price_upto,
+                screen_greaterthan: model.screen_greaterthan,
+                screen_lessthan: model.screen_lessthan,
+                os: model.os
             })
             .getMany();
 
