@@ -1,36 +1,10 @@
 import { ApiProperty } from "@nestjs/swagger";
+import { LaptopUsage } from "../enums/laptop-usage.enum";
 
 export class SearchLaptopDto {
-    @ApiProperty()
-    brand: string;
+    @ApiProperty({ default: LaptopUsage.Personal })
+    usage: LaptopUsage;
 
     @ApiProperty()
-    os: string;
-
-    @ApiProperty()
-    processor: string;
-
-    @ApiProperty()
-    ram: number;
-
-    @ApiProperty()
-    isSSD: boolean;
-
-    @ApiProperty()
-    ssd: number;
-
-    @ApiProperty()
-    hdd: number;
-
-    @ApiProperty()
-    screen: number;
-
-    @ApiProperty()
-    graphics: number;
-
-    @ApiProperty()
-    price_greaterthan: number;
-
-    @ApiProperty()
-    price_lessthan: number;
+    price_upto: number;
 }

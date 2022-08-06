@@ -4,6 +4,7 @@ import { merge } from "lodash";
 import { DataSource, Repository } from "typeorm";
 import { LaptopDto } from "../common/dtos/laptop.dto";
 import { SearchLaptopDto } from "../common/dtos/search-laptop.dto";
+import { LaptopUsage } from "../common/enums/laptop-usage.enum";
 import { Laptop } from "../entities/laptop.entity";
 
 @Injectable()
@@ -65,20 +66,17 @@ export class LaptopService {
     }
 
     async search(model: SearchLaptopDto): Promise<Laptop[]> {
+        let whereClause = "";
+        if(LaptopUsage.Personal == model.usage){
+            whereClause = " AND laptop.graphics >= 4 AND laptop.processor in ('i3','i5','i7') AND laptop.ram >= 4"
+        } else {
+            whereClause = " AND laptop.processor in ('i5','i7','i9') AND laptop.ram >= 8"
+        }
+        
         const laptops = await this.dataSource.manager
             .createQueryBuilder(Laptop, "laptop")
-            .where("UPPER(laptop.brand) like :brand OR UPPER(laptop.os) like :os OR UPPER(laptop.processor) = :processor OR laptop.ram = :ram OR laptop.graphics = :graphics OR ((:isSSD = true AND laptop.ssd > 0) OR (:isSSD = false AND laptop.hdd > 0)) OR laptop.ssd >= :ssd OR laptop.hdd >= :hdd OR laptop.screen >= :screen OR (laptop.price >= :greater_price AND :greater_price != 0) OR (laptop.price <= :less_price AND :less_price != 0) OR (:greater_price != 0 AND :less_price != 0 AND laptop.price >= :greater_price AND laptop.price <= :less_price)", {
-                brand: '%' + model.brand?.toUpperCase() + '%',
-                os: '%' + model.os?.toUpperCase() + '%',
-                processor: model.processor?.toUpperCase(),
-                ram: model.ram,
-                screen: model.screen,
-                graphics: model.graphics,
-                isSSD: model.isSSD,
-                ssd: model.ssd,
-                hdd: model.hdd,
-                greater_price: model.price_greaterthan,
-                less_price: model.price_lessthan
+            .where("laptop.price <= :price_upto" + whereClause, {
+                price_upto: model.price_upto
             })
             .getMany();
 
