@@ -65,20 +65,23 @@ export class LaptopService {
     }
 
     async search(model: SearchLaptopDto): Promise<Laptop[]> {
-        let whereClause = "";
-        if (model.isPersonalUse) {
-            whereClause = " AND laptop.graphics >= 4 AND UPPER(laptop.processor) in ('I3','I5','I7') AND laptop.ram >= 4"
-        } else {
-            whereClause = " AND UPPER(laptop.processor) in ('I5','I7','I9') AND laptop.ram >= 8"
-        }
+
+        if (model.processor == null)
+            model.processor = "";
+        if (model.os == null)
+            model.os == "";
 
         const laptops = await this.dataSource.manager
             .createQueryBuilder(Laptop, "laptop")
-            .where("(laptop.price <= :price_upto OR :price_upto = 0) AND ((laptop.screen BETWEEN :screen_greaterthan AND :screen_lessthan) OR (:screen_greaterthan = 0 AND :screen_lessthan = 0)) AND UPPER(os) = UPPER(:os)" + whereClause, {
+            .where("(laptop.price <= :price_upto OR :price_upto = 0) AND ((laptop.screen BETWEEN :screen_greaterthan AND :screen_lessthan) OR (:screen_greaterthan = 0 AND :screen_lessthan = 0)) AND (UPPER(laptop.os) = UPPER(:os) OR :os = '') AND (laptop.graphics >= :graphics OR :graphics = 0) AND (laptop.ram >= :ram OR :ram = 0) AND (laptop.ssd >= :ssd OR :ssd = 0) AND (UPPER(laptop.processor) = UPPER(:processor) OR :processor = '')", {
                 price_upto: model.price_upto,
                 screen_greaterthan: model.screen_greaterthan,
                 screen_lessthan: model.screen_lessthan,
-                os: model.os
+                os: model.os,
+                graphics: model.graphics,
+                ram: model.ram,
+                ssd: model.ssd,
+                processor: model.processor
             })
             .getMany();
 

@@ -49,7 +49,7 @@ export class LaptopController {
 
     @Post("search")
     // @UseGuards(JwtAuthGuard)
-    @ApiResponse({ type: [Laptop], isArray: true, status: 200 })
+    @ApiResponse({ type: [Laptop], status: 200 })
     async search(@Body() model: SearchLaptopDto): Promise<Laptop[]> {
         return await this.laptopService.search(model);
     }

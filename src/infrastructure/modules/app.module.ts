@@ -3,6 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Laptop } from 'src/core/entities/laptop.entity';
 import { User } from 'src/core/entities/user.entity';
 import { AccountModule } from './account.module';
+import { ContactModule } from './contact.module';
 import { LaptopModule } from './laptop.module';
 
 @Module({
@@ -19,7 +20,8 @@ import { LaptopModule } from './laptop.module';
             autoLoadEntities: true
         }),
         AccountModule,
-        LaptopModule
+        LaptopModule,
+        ContactModule
     ],
     providers: []
 })

@@ -1,9 +1,6 @@
 import { ApiAcceptedResponse, ApiProperty } from "@nestjs/swagger";
 
 export class SearchLaptopDto {
-    @ApiProperty({ default: true })
-    isPersonalUse: boolean;
-
     @ApiProperty()
     price_upto: number;
 
@@ -13,6 +10,18 @@ export class SearchLaptopDto {
     @ApiProperty()
     screen_lessthan: number;
 
-    @ApiProperty()
+    @ApiProperty({ default: '', nullable: false, required: false })
     os: string;
+
+    @ApiProperty()
+    ram: number;
+
+    @ApiProperty()
+    ssd: number;
+
+    @ApiProperty()
+    graphics: number;
+
+    @ApiProperty({ default: '', nullable: false, required: false })
+    processor: string;
 }
