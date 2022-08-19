@@ -73,14 +73,25 @@ export class LaptopService {
 
         const laptops = await this.dataSource.manager
             .createQueryBuilder(Laptop, "laptop")
-            .where("(laptop.price <= :price_upto OR :price_upto = 0) AND ((laptop.screen BETWEEN :screen_greaterthan AND :screen_lessthan) OR (:screen_greaterthan = 0 AND :screen_lessthan = 0)) AND (UPPER(laptop.os) = UPPER(:os) OR :os = '') AND (laptop.graphics >= :graphics OR :graphics = 0) AND (laptop.ram >= :ram OR :ram = 0) AND (laptop.ssd >= :ssd OR :ssd = 0) AND (UPPER(laptop.processor) = UPPER(:processor) OR :processor = '')", {
+            .where(`(
+                laptop.price <= :price_upto OR :price_upto = 0) 
+                AND ((laptop.screen BETWEEN :screen_greaterthan AND :screen_lessthan) OR (:screen_greaterthan = 0 AND :screen_lessthan = 0)) 
+                AND (UPPER(laptop.os) = UPPER(:os) OR :os = '') 
+                AND ((laptop.graphics BETWEEN :graphics_greaterthan AND :graphics_lessthan) OR (:graphics_greaterthan = 0 AND :graphics_lessthan = 0))
+                AND ((laptop.ram BETWEEN :ram_greaterthan AND :ram_lessthan) OR (:ram_greaterthan = 0 AND :ram_lessthan = 0))
+                AND ((laptop.ssd BETWEEN :ssd_greaterthan AND :ssd_lessthan) OR (:ssd_greaterthan = 0 AND :ssd_lessthan = 0))
+                AND (UPPER(laptop.processor) = UPPER(:processor) OR :processor = ''
+            )`, {
                 price_upto: model.price_upto,
                 screen_greaterthan: model.screen_greaterthan,
                 screen_lessthan: model.screen_lessthan,
                 os: model.os,
-                graphics: model.graphics,
-                ram: model.ram,
-                ssd: model.ssd,
+                graphics_greaterthan: model.graphics_greaterthan,
+                graphics_lessthan: model.graphics_lessthan,
+                ram_greaterthan: model.ram_greaterthan,
+                ram_lessthan: model.ram_lessthan,
+                ssd_greaterthan: model.ssd_greaterthan,
+                ssd_lessthan: model.ssd_lessthan,
                 processor: model.processor
             })
             .getMany();

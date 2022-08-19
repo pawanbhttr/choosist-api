@@ -14,13 +14,22 @@ export class SearchLaptopDto {
     os: string;
 
     @ApiProperty()
-    ram: number;
+    ram_greaterthan: number;
 
     @ApiProperty()
-    ssd: number;
+    ram_lessthan: number;
 
     @ApiProperty()
-    graphics: number;
+    ssd_greaterthan: number;
+
+    @ApiProperty()
+    ssd_lessthan: number;
+
+    @ApiProperty()
+    graphics_greaterthan: number;
+
+    @ApiProperty()
+    graphics_lessthan: number;
 
     @ApiProperty({ default: '', nullable: false, required: false })
     processor: string;
