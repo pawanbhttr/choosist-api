@@ -3,6 +3,7 @@ import { User } from 'src/core/entities/user.entity';
 import { JwtService } from "@nestjs/jwt"
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { LoginDto } from 'src/core/common/dtos/login.dto';
 
 @Injectable()
 export class AccountService {
@@ -21,8 +22,10 @@ export class AccountService {
         throw new UnauthorizedException();
     }
 
-    async login(user: any) {
-        const payload = { username: user.username, sub: user._id };
+    async login(model: LoginDto) {
+        const user = await this.validateUser(model.username, model.password);
+        const payload = { username: user.username, sub: user.id };
+        console.log(payload);
         return {
             username: user.username,
             access_token: this.jwtService.sign(payload),
