@@ -25,7 +25,6 @@ export class AccountService {
     async login(model: LoginDto) {
         const user = await this.validateUser(model.username, model.password);
         const payload = { username: user.username, sub: user.id };
-        console.log(payload);
         return {
             username: user.username,
             access_token: this.jwtService.sign(payload),
