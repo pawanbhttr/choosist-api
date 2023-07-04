@@ -10,11 +10,11 @@ import { LaptopModule } from './laptop.module';
     imports: [
         TypeOrmModule.forRoot({
             type: 'postgres',
-            host: 'arjuna.db.elephantsql.com',
+            host: 'your_host',
             port: 5432,
-            username: 'zfpfihbm',
-            password: 'RBzlwiAWXEcrC0MV6gPpGYUbZm55RZiQ',
-            database: 'zfpfihbm',
+            username: 'user_name',
+            password: 'password',
+            database: 'dbname',
             entities: [User, Laptop],
             synchronize: true,
             autoLoadEntities: true
